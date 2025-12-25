@@ -1,14 +1,27 @@
 [
   {
-    "id": 1,
+    "id": 11,
     "category": "Men",
     "image": "images/men1.jpg",
     "prompt": "Extreme low-angle cinematic shot of a man, dramatic lighting, fire glow, ultra realistic, 4K."
   },
+  
   {
-    "id": 2,
+    "id": 12,
     "category": "Men",
     "image": "images/men2.jpg",
     "prompt": "Studio portrait of a young man with neon smoke background, sharp focus, DSLR look."
-  }
+  },
+  
+  {id:1,category:'men',image:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=80',prompt:'Cinematic low-angle shot of a man with firelight, leather jacket, moody contrast.'},
+      {id:2,category:'men',image:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80',prompt:'Studio portrait of a young man sitting, clean white tee, soft dramatic rim lights.'},
+      {id:3,category:'men',image:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80',prompt:'Urban night scene with red sports coupe and person leaning, neon reflections, cinematic.'},
+      {id:4,category:'men',image:'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1200&q=80',prompt:'Black-and-white close-up portrait with high-key contrast and proud expression.'},
+      {id:5,category:'women',image:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80',prompt:'Soft fashion portrait of a woman, pastel background, natural light.'},
+      {id:6,category:'couple',image:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80',prompt:'Romantic couple shot, golden hour, soft bokeh and warm colors.'},
+      {id:7,category:'kids',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80',prompt:'Playful children portrait outdoors, candid smiles and motion blur.'},
+      {id:8,category:'men',image:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1200&q=80',prompt:'Retro inspired portrait, film grain, warm tungsten lights.'},
+      {id:9,category:'women',image:'https://images.unsplash.com/photo-1524503033411-c9566986fc8f?w=1200&q=80',prompt:'Dramatic beauty close-up with softbox, flawless skin retouching.'},
+      {id:10,category:'couple',image:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=1200&q=80',prompt:'Couple walking under city lights, moody, cinematic color grading.'}
+
 ]
