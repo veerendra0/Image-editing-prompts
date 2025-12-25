@@ -1,0 +1,166 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Image Prompts Gallery</title>
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#fff; --muted:#7b7f89; --accent:#6b46ff;
+      --radius:14px; --gap:20px; --pad:18px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#111}
+    .wrap{max-width:1200px;margin:28px auto;padding:18px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .title{display:flex;flex-direction:column}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:2px 0 0;color:var(--muted);font-size:13px}.controls{display:flex;gap:10px;align-items:center}
+select,input[type=search],button{padding:10px 12px;border-radius:10px;border:1px solid #e6e7ee;background:#fff}
+button.btn{background:var(--accent);color:#fff;border:none;cursor:pointer}
+button.ghost{background:transparent}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--gap)}
+
+.card{background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(16,24,40,0.06);overflow:hidden;display:flex;flex-direction:column}
+.media{position:relative;padding-top:66%;overflow:hidden}
+.media img{position:absolute;inset:0;height:100%;width:100%;object-fit:cover}
+.body{padding:var(--pad);flex:1;display:flex;flex-direction:column}
+.prompt{color:#222;font-size:14px;line-height:1.35;margin-bottom:12px;flex:1}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cat{font-size:12px;color:var(--muted);background:#f1f3f8;padding:6px 8px;border-radius:8px}
+.copy{font-size:13px;padding:8px 10px;border-radius:10px;border:1px solid #eee;background:#fafafa;cursor:pointer}
+
+footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+
+/* small helpers */
+.copy.copied{background:#eafff2;border-color:#b7f0d2}
+.trunc{display:block;max-height:3.6em;overflow:hidden}
+
+@media (max-width:520px){.wrap{padding:12px} .controls{flex-direction:column;align-items:stretch} header{align-items:flex-start}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Image Editing Prompts</h1>
+        <p class="lead">Click the "Copy Prompt" button to copy the prompt text. Images shuffle every load.</p>
+      </div><div class="controls">
+    <select id="categorySelect">
+      <option value="all">All categories</option>
+    </select>
+    <input id="searchBox" type="search" placeholder="Search prompts or tags..." />
+    <button id="shuffleBtn" class="btn">Shuffle</button>
+  </div>
+</header>
+
+<main>
+  <div id="grid" class="grid"></div>
+</main>
+
+<footer>Tip: Replace the sample `data` array in the JavaScript with your real prompts and images.</footer>
+
+  </div>  <script>
+    // Sample dataset. Replace these objects with your own images and prompts.
+    const data = [
+      {id:1,category:'men',image:'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&q=80',prompt:'Cinematic low-angle shot of a man with firelight, leather jacket, moody contrast.'},
+      {id:2,category:'men',image:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80',prompt:'Studio portrait of a young man sitting, clean white tee, soft dramatic rim lights.'},
+      {id:3,category:'men',image:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80',prompt:'Urban night scene with red sports coupe and person leaning, neon reflections, cinematic.'},
+      {id:4,category:'men',image:'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1200&q=80',prompt:'Black-and-white close-up portrait with high-key contrast and proud expression.'},
+      {id:5,category:'women',image:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80',prompt:'Soft fashion portrait of a woman, pastel background, natural light.'},
+      {id:6,category:'couple',image:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80',prompt:'Romantic couple shot, golden hour, soft bokeh and warm colors.'},
+      {id:7,category:'kids',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80',prompt:'Playful children portrait outdoors, candid smiles and motion blur.'},
+      {id:8,category:'men',image:'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1200&q=80',prompt:'Retro inspired portrait, film grain, warm tungsten lights.'},
+      {id:9,category:'women',image:'https://images.unsplash.com/photo-1524503033411-c9566986fc8f?w=1200&q=80',prompt:'Dramatic beauty close-up with softbox, flawless skin retouching.'},
+      {id:10,category:'couple',image:'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=1200&q=80',prompt:'Couple walking under city lights, moody, cinematic color grading.'}
+    ];
+
+    // Utility: Fisher-Yates shuffle
+    function shuffleArray(arr){
+      for(let i = arr.length-1; i>0; i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
+      }
+    }
+
+    // Build category list
+    const categorySet = new Set(data.map(d=>d.category));
+    const categorySelect = document.getElementById('categorySelect');
+    categorySet.forEach(c=>{
+      const o = document.createElement('option'); o.value=c; o.textContent = c.charAt(0).toUpperCase()+c.slice(1);
+      categorySelect.appendChild(o);
+    });
+
+    const grid = document.getElementById('grid');
+    const searchBox = document.getElementById('searchBox');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+
+    let current = [];
+
+    function render(items){
+      grid.innerHTML = '';
+      items.forEach(item=>{
+        const card = document.createElement('article'); card.className='card';
+
+        const media = document.createElement('div'); media.className='media';
+        const img = document.createElement('img'); img.loading='lazy'; img.src = item.image; img.alt = (item.prompt||'prompt image');
+        media.appendChild(img);
+
+        const body = document.createElement('div'); body.className='body';
+        const p = document.createElement('div'); p.className='prompt trunc'; p.textContent = item.prompt;
+
+        const meta = document.createElement('div'); meta.className='meta';
+        const cat = document.createElement('div'); cat.className='cat'; cat.textContent = item.category;
+        const copyBtn = document.createElement('button'); copyBtn.className='copy'; copyBtn.textContent='Copy Prompt';
+
+        copyBtn.addEventListener('click',()=>{
+          navigator.clipboard.writeText(item.prompt).then(()=>{
+            copyBtn.textContent='Copied'; copyBtn.classList.add('copied');
+            setTimeout(()=>{ copyBtn.textContent='Copy Prompt'; copyBtn.classList.remove('copied'); },1500);
+          }).catch(()=>{
+            alert('Copy failed. Select the text and press Ctrl/Cmd+C');
+          });
+        });
+
+        meta.appendChild(cat); meta.appendChild(copyBtn);
+        body.appendChild(p); body.appendChild(meta);
+
+        card.appendChild(media); card.appendChild(body);
+        grid.appendChild(card);
+      });
+    }
+
+    function applyFilters(){
+      const q = searchBox.value.trim().toLowerCase();
+      const cat = categorySelect.value;
+      let filtered = current.filter(item=>{
+        const matchesCat = (cat==='all') || item.category===cat;
+        const matchesQ = q==='' || item.prompt.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+        return matchesCat && matchesQ;
+      });
+      render(filtered);
+    }
+
+    // Initialize: shuffle then render
+    function init(){
+      current = data.slice();
+      shuffleArray(current);
+      render(current);
+    }
+
+    // Event hooks
+    searchBox.addEventListener('input', applyFilters);
+    categorySelect.addEventListener('change', applyFilters);
+    shuffleBtn.addEventListener('click', ()=>{ shuffleArray(current); render(current); });
+
+    // Run on load
+    init();
+
+    // Helpful: allow keyboard '/' to focus search box
+    window.addEventListener('keydown', e=>{ if(e.key === '/' && document.activeElement !== searchBox){ e.preventDefault(); searchBox.focus(); }});
+  </script></body>
+</html>
