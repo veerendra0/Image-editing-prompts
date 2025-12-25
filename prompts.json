@@ -13,7 +13,7 @@
   },
   
   {
-    "id":1,"category":"men","image":"https://images.unsplash.com/-1517841905240-472988babdf9?w=1200&q=80","prompt":"Cinematic low-angle shot of a man with firelight, leather jacket, moody contrast."},
+    "id":1,"category":"Men","image":"https://images.unsplash.com/-1517841905240-472988babdf9?w=1200&q=80","prompt":"Cinematic low-angle shot of a man with firelight, leather jacket, moody contrast."},
       {id:2,category:'men',image:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80',prompt:'Studio portrait of a young man sitting, clean white tee, soft dramatic rim lights.'},
       {id:3,category:'men',image:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80',prompt:'Urban night scene with red sports coupe and person leaning, neon reflections, cinematic.'},
       {id:4,category:'men',image:'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1200&q=80',prompt:'Black-and-white close-up portrait with high-key contrast and proud expression.'},
