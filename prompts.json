@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "category": "Men",
+    "image": "images/men1.jpg",
+    "prompt": "Extreme low-angle cinematic shot of a man, dramatic lighting, fire glow, ultra realistic, 4K."
+  },
+  {
+    "id": 2,
+    "category": "Men",
+    "image": "images/men2.jpg",
+    "prompt": "Studio portrait of a young man with neon smoke background, sharp focus, DSLR look."
+  }
+]

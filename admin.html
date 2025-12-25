@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#f5f6fa;padding:20px}
+h2{text-align:center}
+input,textarea,select,button{width:100%;margin:8px 0;padding:10px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-top:15px}
+button{background:#6c5ce7;color:#fff;border:none;border-radius:6px}
+.delete{background:#d63031}
+</style>
+</head>
+<body>
+
+<h2>Admin Panel</h2>
+
+<div class="card">
+  <select id="category">
+    <option>Men</option>
+    <option>Women</option>
+    <option>Couple</option>
+    <option>Kids</option>
+  </select>
+  <input id="image" placeholder="Image path (images/xyz.jpg)">
+  <textarea id="prompt" placeholder="Enter prompt"></textarea>
+  <button onclick="addPrompt()">Add Prompt</button>
+</div>
+
+<div id="list"></div>
+
+<script>
+let prompts = JSON.parse(localStorage.getItem("prompts")) || [];
+
+function save(){
+  localStorage.setItem("prompts", JSON.stringify(prompts));
+  render();
+}
+
+function addPrompt(){
+  prompts.push({
+    id: Date.now(),
+    category: category.value,
+    image: image.value,
+    prompt: prompt.value
+  });
+  save();
+}
+
+function remove(id){
+  prompts = prompts.filter(p => p.id !== id);
+  save();
+}
+
+function render(){
+  list.innerHTML = '';
+  prompts.forEach(p => {
+    list.innerHTML += `
+      <div class="card">
+        <b>${p.category}</b>
+        <p>${p.prompt}</p>
+        <button class="delete" onclick="remove(${p.id})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
